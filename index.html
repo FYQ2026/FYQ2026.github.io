@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>真心相亲交友平台</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+body {
+  background: #fdf6f3;
+  color: #333;
+}
+
+/* 顶部导航 */
+.navbar {
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  padding: 18px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+
+.nav-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #e68b8b;
+}
+
+/* 横幅 */
+.banner {
+  background: linear-gradient(135deg, #f8b1b1, #e68b8b);
+  color: white;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.banner h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.banner p {
+  font-size: 15px;
+  opacity: 0.95;
+}
+
+/* 工具栏 */
+.toolbar {
+  max-width: 1000px;
+  margin: -25px auto 0;
+  padding: 0 15px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+#search {
+  flex: 1;
+  min-width: 200px;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.filter-btn {
+  padding: 14px 18px;
+  border: none;
+  background: white;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: 0.2s;
+}
+
+.filter-btn.active {
+  background: #e68b8b;
+  color: white;
+}
+
+.join-btn {
+  padding: 14px 24px;
+  background: #e68b8b;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(230, 139, 139, 0.2);
+}
+
+/* 卡片容器 */
+.container {
+  max-width: 1000px;
+  margin: 30px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 25px;
+  padding: 0 15px;
+}
+
+/* 卡片 */
+.card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.avatar {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+}
+
+.info {
+  padding: 22px;
+}
+
+.name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.base {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+.about {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.love {
+  background: #fef3f1;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #c96a6a;
+  margin-bottom: 18px;
+}
+
+.btn {
+  display: block;
+  background: #e68b8b;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* 弹窗 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-box {
+  background: white;
+  max-width: 520px;
+  width: 90%;
+  padding: 32px;
+  border-radius: 20px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-box h3 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #333;
+  font-size: 22px;
+}
+
+.form-item {
+  margin-bottom: 16px;
+}
+
+.form-item label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #555;
+}
+
+.form-item input,
+.form-item select,
+.form-item textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  font-size: 14px;
+  background: #fafafa;
+}
+
+.form-btns {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.form-btns button {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#submitForm {
+  background: #e68b8b;
+  color: white;
+}
+
+#closeModal {
+  background: #f2f2f2;
+  color: #666;
+}
+
+/* 底部 */
+.footer {
+  text-align: center;
+  padding: 30px 20px;
+  color: #999;
+  font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <div class="nav-container">
+    <div class="logo">真心相亲</div>
+  </div>
+</div>
+
+<div class="banner">
+  <h1>遇见对的人</h1>
+  <p>真诚交友 · 用心脱单 · 非诚勿扰</p >
+</div>
+
+<div class="toolbar">
+  <input id="search" placeholder="搜索姓名、城市、职业、年龄..." />
+  <button class="filter-btn active" data-filter="all">全部</button>
+  <button class="filter-btn" data-filter="boy">男生</button>
+  <button class="filter-btn" data-filter="girl">女生</button>
+  <button class="join-btn" id="openModal">我要报名</button>
+</div>
+
+<div class="container" id="list">
+
+<!-- 女生 1 -->
+<div class="card" data-type="girl">
+  < img class="avatar" src="https://picsum.photos/600/700?1">
+  <div class="info">
+    <div class="name">小琳 26岁</div>
+    <div class="base">教师 | 162cm | 本科 | 浙江</div>
+    <div class="about">性格温和，喜欢做饭、旅行、看书。</div>
+    <div class="love">择偶：25-32岁，稳重、有责任心。</div>
+    <a class="btn" href=" ">联系TA</a >
+  </div>
+</div>
+
+<!-- 女生 2 -->
+<div class="card" data-type="girl">
+  < img class="avatar" src="https://picsum.photos/600/700?2">
+  <div class="info">
+    <div class="name">小雨 28岁</div>
+    <div class="base">设计师 | 165cm | 本科 | 杭州</div>
+    <div class="about">乐观开朗，喜欢摄影、花艺、养宠物。</div>
+    <div class="love">择偶：27-33岁，成熟、有担当、情绪稳定。</div>
+    <a class="btn" href="#">联系TA</a >
+  </div>
+</div>
+
+<!-- 男生 1 -->
+<div class="card" data-type="boy">
+  < img class="avatar" src="https://picsum.photos/600/700?3">
+  <div class="info">
+    <div class="name">阿杰 29岁</div>
+    <div class="base">程序员 | 175cm | 本科 | 浙江</div>
+    <div class="about">性格踏实，不抽烟不喝酒，喜欢运动。</div>
+    <div class="love">择偶：23-28岁，温柔善良、三观一致。</div>
+    <a class="btn" href="#">联系TA</a >
+  </div>
+</div>
+
+<!-- 男生 2 -->
+<div class="card" data-type="boy">
+  < img class="avatar" src="https://picsum.photos/600/700?4">
+  <div class="info">
+    <div class="name">小宇 27岁</div>
+    <div class="base">创业者 | 173cm | 大专 | 宁波</div>
+    <div class="about">性格开朗，有上进心，喜欢自驾游。</div>
+    <div class="love">择偶：24-29岁，温柔体贴、顾家孝顺。</div>
+    <a class="btn" href="#">联系TA</a >
+  </div>
+</div>
+
+</div>
+
+<!-- 报名弹窗 -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <h3>我要报名</h3>
+    <form id="applyForm">
+      <div class="form-item">
+        <label>姓名</label>
+        <input type="text" id="name" required>
+      </div>
+      <div class="form-item">
+        <label>性别</label>
+        <select id="gender" required>
+          <option value="">请选择</option>
+          <option value="boy">男生</option>
+          <option value="girl">女生</option>
+        </select>
+      </div>
+      <div class="form-item">
+        <label>年龄</label>
+        <input type="number" id="age" required>
+      </div>
+      <div class="form-item">
+        <label>职业 | 身高 | 学历 | 城市</label>
+        <input type="text" id="base" required placeholder="例如：程序员 | 175cm | 本科 | 杭州">
+      </div>
+      <div class="form-item">
+        <label>自我介绍</label>
+        <textarea id="about" required></textarea>
+      </div>
+      <div class="form-item">
+        <label>择偶要求</label>
+        <textarea id="love" required></textarea>
+      </div>
+      <div class="form-item">
+        <label>微信号</label>
+        <input type="text" id="wechat" required>
+      </div>
+      <div class="form-btns">
+        <button type="submit" id="submitForm">提交报名</button>
+        <button type="button" id="closeModal">取消</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="footer">
+  真心相亲平台 © 认真交友 用心脱单
+</div>
+
+<script>
+// 搜索筛选
+const search = document.getElementById('search');
+const btns = document.querySelectorAll('.filter-btn');
+const cards = document.querySelectorAll('.card');
+
+search.addEventListener('input', doFilter);
+btns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    btns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    doFilter();
+  });
+});
+
+function doFilter() {
+  const kw = search.value.toLowerCase();
+  const type = document.querySelector('.filter-btn.active').dataset.filter;
+  cards.forEach(card => {
+    const txt = card.innerText.toLowerCase();
+    const t = card.dataset.type;
+    const okType = type === 'all' || t === type;
+    const okKw = txt.includes(kw);
+    card.style.display = okType && okKw ? 'block' : 'none';
+  });
+}
+
+// 弹窗
+const modal = document.getElementById('modal');
+document.getElementById('openModal').onclick = () => modal.classList.add('show');
+document.getElementById('closeModal').onclick = () => modal.classList.remove('show');
+
+// 提交发微信
+document.getElementById('applyForm').addEventListener('submit', e => {
+  e.preventDefault();
+
+  // ========== 改成你的微信号 ==========
+  const YOUR_WECHAT = "FanYuqing0520";
+
+  const name = document.getElementById('name').value;
+  const gender = document.getElementById('gender').value === 'boy' ? '男生' : '女生';
+  const age = document.getElementById('age').value;
+  const base = document.getElementById('base').value;
+  const about = document.getElementById('about').value;
+  const love = document.getElementById('love').value;
+  const wechat = document.getElementById('wechat').value;
+
+  const text = `
+新报名：
+姓名：${name}
+性别：${gender}
+年龄：${age}
+资料：${base}
+自我介绍：${about}
+择偶要求：${love}
+微信：${wechat}
+  `;
+
+  const url = `weixin://sendmessage?username=${YOUR_WECHAT}&content=${encodeURIComponent(text)}`;
+  window.open(url);
+
+  alert('报名成功！已发送给管理员～');
+  modal.classList.remove('show');
+  document.getElementById('applyForm').reset();
+});
+</script>
+
+</body>
+</html>
